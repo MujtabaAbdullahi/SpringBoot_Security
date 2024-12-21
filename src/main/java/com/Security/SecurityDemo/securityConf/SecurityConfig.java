@@ -8,7 +8,9 @@ import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
 
+// this annotation is used to tell the spring boot that this class the configuration class
 @Configuration
+// this annotation is used to be able to use the 
 @EnableWebSecurity
 public class SecurityConfig {
   
