@@ -1,6 +1,7 @@
 package com.Security.SecurityDemo.common;
 
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.web.bind.annotation.GetMapping;
 
 
@@ -22,5 +23,7 @@ public class CommonController {
     public String getAdmin() {
         return "Hollo Admin";
     }
+
+
     
 }
