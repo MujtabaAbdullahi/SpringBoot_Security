@@ -11,9 +11,14 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
 import static org.springframework.security.config.Customizer.withDefaults;
+
+import javax.sql.DataSource;
+
+import org.springframework.beans.factory.annotation.Autowired;
 
 // this annotation is used to tell the spring boot that this class the configuration class
 @Configuration
@@ -21,6 +26,9 @@ import static org.springframework.security.config.Customizer.withDefaults;
 @EnableWebSecurity    
 @EnableMethodSecurity
 public class SecurityConfig {
+
+  @Autowired
+  DataSource dataSource; 
   
     @Bean
       SecurityFilterChain defaultSecurityFilterChain(HttpSecurity http) throws Exception{
@@ -60,6 +68,19 @@ public class SecurityConfig {
         .roles("ADMIN").
         build();
 
-        return new InMemoryUserDetailsManager(user1, admin);
+        UserDetails general = User.withUsername("general").
+        password("{noop}admin123")
+        .roles("GUST").
+        build();
+
+
+        JdbcUserDetailsManager userDetailsManager = new JdbcUserDetailsManager(dataSource);
+        userDetailsManager.createUser(user1);
+        userDetailsManager.createUser(admin);
+        userDetailsManager.createUser(general);
+
+           return userDetailsManager;
+        //this used when we want in memory user
+        // return new InMemoryUserDetailsManager(user1, admin);
       }
-}
+}     
