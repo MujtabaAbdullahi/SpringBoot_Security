@@ -5,12 +5,12 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.config.annotation.method.configuration.EnableMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
-import org.springframework.security.config.annotation.web.configurers.HeadersConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
-import org.springframework.security.provisioning.InMemoryUserDetailsManager;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
 
@@ -58,18 +58,35 @@ public class SecurityConfig {
       @Bean
       public UserDetailsService userDetailsService(){
 
+        // this the way to store password as a plain text
+        // UserDetails user1 = User.withUsername("user").
+        // password("{noop}user123")
+        // .roles("USER").
+        // build();
+
+        // UserDetails admin = User.withUsername("admin").
+        // password("{noop}admin123")
+        // .roles("ADMIN").
+        // build();
+
+        // UserDetails general = User.withUsername("general").
+        // password("{noop}admin123")
+        // .roles("GUST").
+        // build();
+
+
         UserDetails user1 = User.withUsername("user").
-        password("{noop}user123")
+        password(passwordEncoder().encode("user123"))
         .roles("USER").
         build();
 
         UserDetails admin = User.withUsername("admin").
-        password("{noop}admin123")
+        password(passwordEncoder().encode( "admin123"))
         .roles("ADMIN").
         build();
 
         UserDetails general = User.withUsername("general").
-        password("{noop}admin123")
+        password(passwordEncoder().encode("admin123"))
         .roles("GUST").
         build();
 
@@ -82,5 +99,10 @@ public class SecurityConfig {
            return userDetailsManager;
         //this used when we want in memory user
         // return new InMemoryUserDetailsManager(user1, admin);
+      }
+
+      @Bean
+      public PasswordEncoder passwordEncoder(){
+        return new BCryptPasswordEncoder();
       }
 }     
