@@ -13,17 +13,15 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.security.web.SecurityFilterChain;
-
 import static org.springframework.security.config.Customizer.withDefaults;
-
 import javax.sql.DataSource;
-
 import org.springframework.beans.factory.annotation.Autowired;
 
 // this annotation is used to tell the spring boot that this class the configuration class
 @Configuration
 // this annotation is used to be able to use the 
-@EnableWebSecurity    
+@EnableWebSecurity
+// this to enable method security for controlling who is able to see what    
 @EnableMethodSecurity
 public class SecurityConfig {
 
@@ -45,13 +43,11 @@ public class SecurityConfig {
         //http.formLogin(withDefaults());
         http.headers(headers -> headers.frameOptions(frameOptions -> frameOptions.sameOrigin()));
         http.httpBasic(withDefaults());
+        // Cross sit request forgery is a type of attack that occurs when a malicious web site, email, blog, instant message, or program causes
+        // a user's web browser to perform an unwanted action on a trusted site when the user is authenticated.
         http.csrf(csrf -> csrf.ignoringRequestMatchers("/h2-console/**"));
-
         // or
         // http.csrf(csrf -> csrf.disable());
-
-
-
         return http.build();
       }
 
